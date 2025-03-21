@@ -8,7 +8,7 @@ class Foret {
 
     private Cellule[][] grille;
 
-    public Foret(int h, int l, double p, List<int[]> feuxInitiaux) {
+    public Foret(int h, int l, double p, List<int[]> feuxInitiaux, List<int[]> rochers) {
         this.h = h;
         this.l = l;
         this.p = p;
@@ -28,6 +28,14 @@ class Foret {
             int y = coord[1];
             if (x >= 0 && x < h && y >= 0 && y < l) {
                 grille[x][y].setEtat(EtatCellule.FEU);
+            }
+        }
+        // Placer les rochers
+        for (int[] coord : rochers) {
+            int x = coord[0];
+            int y = coord[1];
+            if (x >= 0 && x < h && y >= 0 && y < l) {
+                grille[x][y].setEtat(EtatCellule.ROCHER);
             }
         }
     }
@@ -78,10 +86,12 @@ class Foret {
         for (int k = 0; k < 4; k++) {
             int x = i + dx[k];
             int y = j + dy[k];
-
-            if (x >= 0 && x < h && y >= 0 && y < l && grille[x][y].getEtat() == EtatCellule.ARBRE && random.nextDouble() < p) {
-                nouvelleGrille[x][y].setEtat(EtatCellule.FEU);
+            if (x >= 0 && x < h && y >= 0 && y < l && grille[x][y].getEtat() != EtatCellule.ROCHER) {
+                if (grille[x][y].getEtat() == EtatCellule.ARBRE && random.nextDouble() < p) {
+                    nouvelleGrille[x][y].setEtat(EtatCellule.FEU);
+                }
             }
+
         }
     }
 
@@ -98,6 +108,9 @@ class Foret {
                         break;
                     case CENDRES:
                         System.out.print("⬛ ");
+                        break;
+                    case ROCHER:
+                        System.out.print("🪨 ");
                         break;
                 }
             }

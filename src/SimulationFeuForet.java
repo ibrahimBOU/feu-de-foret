@@ -10,6 +10,7 @@ public class SimulationFeuForet {
         int h = 0, l = 0;
         double p = 0;
         List<int[]> feuxInitiaux = new ArrayList<>();
+        List<int[]> rochers = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(fichierConfig)) {
             while (scanner.hasNextLine()) {
@@ -34,6 +35,15 @@ public class SimulationFeuForet {
                             feuxInitiaux.add(new int[]{x, y});
                         }
                         break;
+                    case "rochers":
+                        String[] coordonneesRochers = parties[1].split(";");
+                        for (String coord : coordonneesRochers) {
+                            String[] xy = coord.split(",");
+                            int x = Integer.parseInt(xy[0]);
+                            int y = Integer.parseInt(xy[1]);
+                            rochers.add(new int[]{x, y});
+                        }
+                        break;
                 }
             }
         } catch (FileNotFoundException e) {
@@ -42,7 +52,7 @@ public class SimulationFeuForet {
         }
 
         // Créer la forêt
-        Foret foret = new Foret(h, l, p, feuxInitiaux);
+        Foret foret = new Foret(h, l, p, feuxInitiaux,rochers);
 
         // Simulation étape par étape
         int step = 0;
